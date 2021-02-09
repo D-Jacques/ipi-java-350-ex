@@ -48,6 +48,9 @@ public class Employe {
      * @return
      */
     public Integer getNombreAnneeAnciennete() {
+        if(this.dateEmbauche == null || dateEmbauche.isAfter(LocalDate.now())){
+            return null;
+        }
         return LocalDate.now().getYear() - dateEmbauche.getYear();
     }
 
@@ -105,6 +108,11 @@ case SATURDAY:var = var + 1;
         else {
             prime = Entreprise.primeAnnuelleBase() * (this.performance + Entreprise.INDICE_PRIME_BASE) + primeAnciennete;
         }
+
+        if(this.tempsPartiel < 0){
+            return null;
+        }
+
         //Au pro rata du temps partiel.
         return prime * this.tempsPartiel;
     }
