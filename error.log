@@ -1,0 +1,12 @@
+​​10-02-2021 14:05:56.942​​ WARN  com.ipiecoles.java.java350.service.EmployeService​​.embaucheEmploye - Aucun matricule trouvé, matricule initial affecté
+​​10-02-2021 14:05:56.944​​ ERROR com.ipiecoles.java.java350.service.EmployeService​​.embaucheEmploye - L'employé de matricule T00001 existe déjà en BDD
+​​10-02-2021 14:05:56.987​​ WARN  com.ipiecoles.java.java350.service.EmployeService​​.embaucheEmploye - Aucun matricule trouvé, matricule initial affecté
+​​10-02-2021 14:05:56.992​​ ERROR com.ipiecoles.java.java350.service.EmployeService​​.embaucheEmploye - Limite des 100000 matricules atteinte !
+​​10-02-2021 14:08:55.933​​ WARN  com.ipiecoles.java.java350.service.EmployeService​​.embaucheEmploye - Aucun matricule trouvé, matricule initial affecté
+​​10-02-2021 14:08:55.937​​ ERROR com.ipiecoles.java.java350.service.EmployeService​​.embaucheEmploye - L'employé de matricule T00001 existe déjà en BDD
+​​10-02-2021 14:08:55.978​​ WARN  com.ipiecoles.java.java350.service.EmployeService​​.embaucheEmploye - Aucun matricule trouvé, matricule initial affecté
+​​10-02-2021 14:08:55.987​​ ERROR com.ipiecoles.java.java350.service.EmployeService​​.embaucheEmploye - Limite des 100000 matricules atteinte !
+​​10-02-2021 14:10:45.572​​ WARN  com.ipiecoles.java.java350.service.EmployeService​​.embaucheEmploye - Aucun matricule trouvé, matricule initial affecté
+​​10-02-2021 14:10:45.574​​ ERROR com.ipiecoles.java.java350.service.EmployeService​​.embaucheEmploye - L'employé de matricule T00001 existe déjà en BDD
+​​10-02-2021 14:10:45.620​​ WARN  com.ipiecoles.java.java350.service.EmployeService​​.embaucheEmploye - Aucun matricule trouvé, matricule initial affecté
+​​10-02-2021 14:10:45.627​​ ERROR com.ipiecoles.java.java350.service.EmployeService​​.embaucheEmploye - Limite des 100000 matricules atteinte !
