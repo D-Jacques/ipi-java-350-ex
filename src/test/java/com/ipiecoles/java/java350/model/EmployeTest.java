@@ -120,6 +120,65 @@ public class EmployeTest {
         Assertions.assertThat(prime).isEqualTo(1000.0);
     }
 
+    @Test
+    public void testAugmenterSalaireAugmentEmployeSalaire(){
+        //Given
+        //Je créer un employé avec un salaire de 1650
+        Employe employe = new Employe("Doe", "John", null, LocalDate.now(), 1650d, 1, 1.0);
+
+        //When
+        //Je calcule le nouveau salaire de l'employé en passant en paramètres 10%
+        Double nouveauSalaire = employe.augmenterSalaire(10);
+
+        //Then
+        //Je vérifie que le nouveauSalaire est bien supérieur à celui définit dans employe
+        Assertions.assertThat(nouveauSalaire).isGreaterThan(employe.getSalaire());
+    }
+
+    @Test
+    public void testAugmenterSalairePourcentagenegatif(){
+        //Given
+        Employe employe = new Employe("Doe", "John", null, LocalDate.now(), 1600d, 1, 1.0);
+
+        //When
+        Double nouveauSalaire = employe.augmenterSalaire(-(10d));
+
+        //Then
+        Assertions.assertThat(nouveauSalaire).isNotNull();
+        Assertions.assertThat(nouveauSalaire).isPositive();
+    }
+
+    @Test
+    public void testAugmenterSalaireSalaireIncorrect(){
+        //Given
+        Employe employe = new Employe("Doe", "John", null, LocalDate.now(), 100d, 1, 1.0);
+
+        //When
+        Double nouveauSalaire = employe.augmenterSalaire(10);
+
+        //Then
+        Assertions.assertThat(nouveauSalaire).isNotNull();
+        Assertions.assertThat(nouveauSalaire).isNotEqualTo(0);
+    }
+
+    @ParameterizedTest(name = "Perf {0}, matricule {1}, txActivite {2}, anciennete {3}, salaire {4}, pourcentage {5} => salaireAttendu {6}")
+    @CsvSource({
+            "1, 'T12345', 1.0, 10, 1552.21, 10.0, 1707.431",
+            "1, 'T12345', 0.5, 4, 1400.01, 25.0, 1901.525",
+            "2, 'T12345', 1.0, 0, 1950.1, 0.0, 1950.1",
+            "1, 'T12345', 1.0, 2, 2000.0, -10.0, 2000.0",
+    })
+    public void testAugmenterSalaire(Integer performance, String matricule, Double tauxActivite, Long nbAnneesAnciennete, Double salaire, Double pourcentage,
+                                     Double salaireAttendu){
+        //Given
+        Employe employe = new Employe("Doe", "John", matricule,
+                LocalDate.now().minusYears(nbAnneesAnciennete), salaire,
+                performance, tauxActivite);
+        //When
+        Double salaireAugmente = employe.augmenterSalaire(pourcentage);
+        //Then
+        Assertions.assertThat(salaireAugmente).isEqualTo(salaireAttendu);
+    }
 
 
 }

@@ -16,6 +16,9 @@ import java.time.LocalDate;
 @SpringBootTest
 class EmployeServiceIntegrationTest {
 
+    //Test unitaire = test de code => le code fait ce qui est attendu
+    //Test d'intégration = test de fonctionalité
+
     @Autowired
     private EmployeService employeService;
 

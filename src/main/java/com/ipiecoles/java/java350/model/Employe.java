@@ -150,7 +150,22 @@ public class Employe {
     }
 
     //Augmenter salaire
-    //public void augmenterSalaire(double pourcentage){}
+    /**
+     * Calcul de l'augmentation du salaire d'un employé.
+     *
+     * Cette méthode augmente tout simplement le salaire de l'employé selon un pourcentage passé en paramètres.
+     *
+     * @param pourcentage le pourcentage d'augmentation du salaire de l'employe
+     *
+     */
+    public double augmenterSalaire(double pourcentage){
+        if(pourcentage <= 0){
+            return this.getSalaire();
+        } else if (this.getSalaire() == null || this.getSalaire() <= Entreprise.SALAIRE_BASE){
+            this.setSalaire(Entreprise.SALAIRE_BASE);
+        }
+        return this.getSalaire()+(this.getSalaire()*(pourcentage/100d));
+    }
 
     public Long getId() {
         return id;
