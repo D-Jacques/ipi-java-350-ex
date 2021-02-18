@@ -180,5 +180,42 @@ public class EmployeTest {
         Assertions.assertThat(salaireAugmente).isEqualTo(salaireAttendu);
     }
 
+    @Test
+    public void testGetNbRttNotNullOrEqualZero(){
+        //Given
+        Employe employe = new Employe("Doe", "John", "T01234", LocalDate.of(2019, 10, 10), 1700d, 1, 1.0);
+
+        //When
+        Integer nbRtt = employe.getNbRtt();
+        System.out.println(nbRtt);
+
+        //Then
+        Assertions.assertThat(nbRtt).isNotNull();
+        Assertions.assertThat(nbRtt).isNotEqualTo(0);
+    }
+
+    @ParameterizedTest(name = "tpsPartiel {0}, dateReference {1} => nbRttAttendu {3}")
+    @CsvSource({
+        "1.0, 2019, 8",
+        "1.0, 2021, 10",
+        "1.0, 2022, 10",
+        "1.0, 2032, 11",
+        "1.0, 2039, 10",
+        "1.5, 2022, 15",
+        "0.5, 2021, 5",
+        "0.5, 2019, 4",
+    })
+    public void testGetNbRtt(Double tpsPartiel, Integer dateReference, Integer nbRttAttendu){
+        //Given
+        Employe employe = new Employe("Doe", "John", "T01234", LocalDate.of(2015, 10, 10), 1700d, 1, tpsPartiel);
+
+        //When
+        Integer nbRtt = employe.getNbRtt(LocalDate.of(dateReference, 1, 1));
+        System.out.println(nbRtt);
+
+        //Then
+        Assertions.assertThat(nbRtt).isEqualTo(nbRttAttendu);
+    }
+
 
 }

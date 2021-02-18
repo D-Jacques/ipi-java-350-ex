@@ -98,8 +98,12 @@ public class Employe {
                 nbSamediDimanche = nbSamediDimanche + 1;
                 break;
         }
+        //Entreprise.joursFeries => ressorts tout les jours fériés d'une année
+        //Calcul du nombre de jours férié de l'année ne tombant pas un week-end
         int nbJoursFeriesSemaine = (int) Entreprise.joursFeries(dateReference).stream().filter(localDate ->
                 localDate.getDayOfWeek().getValue() <= DayOfWeek.FRIDAY.getValue()).count();
+        //Lambda
+
         return (int) Math.ceil((
                 nbJoursAnnee
                         - Entreprise.NB_JOURS_MAX_FORFAIT
