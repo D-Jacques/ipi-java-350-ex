@@ -8,6 +8,10 @@ import com.ipiecoles.java.java350.repository.EmployeRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -44,6 +48,28 @@ class EmployeServiceIntegrationTest {
         Assertions.assertThat(employe.getTempsPartiel()).isEqualTo(1.0);
         Assertions.assertThat(employe.getDateEmbauche()).isEqualTo(LocalDate.now());
         Assertions.assertThat(employe.getMatricule()).isEqualTo("T00001");
+    }
+
+    @Test
+    public void testParametreCalculPerformanceCommercial() throws EmployeException{
+        //Given
+        String nom = "Doe";
+        String prenom = "John";
+        Poste poste = Poste.COMMERCIAL;
+        NiveauEtude niveauEtude = NiveauEtude.LICENCE;
+        Double tempsPartiel = 1.0;
+        employeService.embaucheEmploye(nom, prenom, poste, niveauEtude, tempsPartiel);
+        Long caTraite = 45000L;
+        Long objectifCa = 40000L;
+        String matricule = "C"+employeRepository.findLastMatricule();
+
+        //When
+        employeService.calculPerformanceCommercial(matricule, caTraite, objectifCa);
+
+        //then
+        Employe employe = employeRepository.findByMatricule(matricule);
+        System.out.println(employe.getPerformance());
+        Assertions.assertThat(employe.getPerformance()).isEqualTo(3);
     }
 
     @AfterEach

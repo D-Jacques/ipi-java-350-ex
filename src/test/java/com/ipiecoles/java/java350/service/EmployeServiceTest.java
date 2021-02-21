@@ -27,11 +27,6 @@ class EmployeServiceTest {
     @Mock
     private EmployeRepository employeRepository;
 
-/*    @BeforeEach
-    public void setup(){
-        MockitoAnnotations.initMocks(this.getClass());
-    }*/
-
     @Test
     public void testEmbauchePremierEmploye() throws EmployeException {
         //Given Pas d'employés en base
@@ -175,12 +170,13 @@ class EmployeServiceTest {
     @ParameterizedTest(name = "Perf {0}, caTraite {1}, objectifCa {2} => performanceAttendu {3}")
     @CsvSource({
             "1, 45000, 40000, 2", // ca entre 5% et 20% (entre 42 000 et 48 000)
-            "3, 50000, 40000, 8", // ca supérieur à 20% (> a 48 000) + bonus de perf superieur à perf moyenne
+            "4, 50000, 40000, 9", // ca supérieur à 20% (> a 48 000) + bonus de perf superieur à perf moyenne
             "2, 30000, 40000, 1", // ca à -20% (< à 32 000)
             "4, 35000, 40000, 2", // ca entre -20% et -5% (entre 32 000 et 38 000)
+            "2, 40000, 40000, 2", // ca entre -5% et 5% (38 000 et 42 000)
 
     })
-    public void testCalculPerformanceCommercialCaTraiteIncorrect(Integer basePerformance, Long caTraite, Long objectifCa,
+    public void testParametreCalculPerformanceCommercial(Integer basePerformance, Long caTraite, Long objectifCa,
                                                                  Integer performanceAttendue) throws EmployeException{
         //Given
         String nom = "Doe";
@@ -188,7 +184,7 @@ class EmployeServiceTest {
         String matricule = "C12345";
         Employe employeTest = new Employe(nom, prenom, matricule, LocalDate.now(), 2400d, basePerformance, 1.0);
         Mockito.when(employeRepository.findByMatricule(matricule)).thenReturn(employeTest);
-        Mockito.when(employeRepository.avgPerformanceWhereMatriculeStartsWith("C")).thenReturn(2d);
+        Mockito.when(employeRepository.avgPerformanceWhereMatriculeStartsWith("C")).thenReturn(3d);
 
         //When
         employeService.calculPerformanceCommercial(matricule, caTraite, objectifCa);
@@ -200,6 +196,5 @@ class EmployeServiceTest {
         System.out.println(employeRetour.getPerformance());
         Assertions.assertThat(employeRetour.getPerformance()).isEqualTo(performanceAttendue);
     }
-
 
 }

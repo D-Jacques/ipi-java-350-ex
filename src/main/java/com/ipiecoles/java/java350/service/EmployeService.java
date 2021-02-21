@@ -115,6 +115,7 @@ public class EmployeService {
         }
 
         Integer performance = Entreprise.PERFORMANCE_BASE;
+
         //Cas 2
         if(caTraite >= objectifCa*0.8 && caTraite < objectifCa*0.95){
             performance = Math.max(Entreprise.PERFORMANCE_BASE, employe.getPerformance() - 2);
