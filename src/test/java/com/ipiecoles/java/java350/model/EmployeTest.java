@@ -121,7 +121,7 @@ public class EmployeTest {
     }
 
     @Test
-    public void testAugmenterSalaireAugmentEmployeSalaire(){
+    void testAugmenterSalaireAugmentEmployeSalaire(){
         //Given
         //Je créer un employé avec un salaire de 1650
         Employe employe = new Employe("Doe", "John", null, LocalDate.now(), 1650d, 1, 1.0);
@@ -136,7 +136,7 @@ public class EmployeTest {
     }
 
     @Test
-    public void testAugmenterSalairePourcentagenegatif(){
+    void testAugmenterSalairePourcentagenegatif(){
         //Given
         Employe employe = new Employe("Doe", "John", null, LocalDate.now(), 1600d, 1, 1.0);
 
@@ -144,12 +144,11 @@ public class EmployeTest {
         Double nouveauSalaire = employe.augmenterSalaire(-(10d));
 
         //Then
-        Assertions.assertThat(nouveauSalaire).isNotNull();
-        Assertions.assertThat(nouveauSalaire).isPositive();
+        Assertions.assertThat(nouveauSalaire).isNotNull().isPositive();
     }
 
     @Test
-    public void testAugmenterSalaireSalaireIncorrect(){
+    void testAugmenterSalaireSalaireIncorrect(){
         //Given
         Employe employe = new Employe("Doe", "John", null, LocalDate.now(), 100d, 1, 1.0);
 
@@ -157,8 +156,7 @@ public class EmployeTest {
         Double nouveauSalaire = employe.augmenterSalaire(10);
 
         //Then
-        Assertions.assertThat(nouveauSalaire).isNotNull();
-        Assertions.assertThat(nouveauSalaire).isNotEqualTo(0);
+        Assertions.assertThat(nouveauSalaire).isNotNull().isNotEqualTo(0);
     }
 
     @ParameterizedTest(name = "Perf {0}, matricule {1}, txActivite {2}, anciennete {3}, salaire {4}, pourcentage {5} => salaireAttendu {6}")
@@ -168,7 +166,7 @@ public class EmployeTest {
             "2, 'T12345', 1.0, 0, 1950.1, 0.0, 1950.1",
             "1, 'T12345', 1.0, 2, 2000.0, -10.0, 2000.0",
     })
-    public void testAugmenterSalaire(Integer performance, String matricule, Double tauxActivite, Long nbAnneesAnciennete, Double salaire, Double pourcentage,
+    void testAugmenterSalaire(Integer performance, String matricule, Double tauxActivite, Long nbAnneesAnciennete, Double salaire, Double pourcentage,
                                      Double salaireAttendu){
         //Given
         Employe employe = new Employe("Doe", "John", matricule,
@@ -181,7 +179,7 @@ public class EmployeTest {
     }
 
     @Test
-    public void testGetNbRttNotNullOrEqualZero(){
+    void testGetNbRttNotNullOrEqualZero(){
         //Given
         Employe employe = new Employe("Doe", "John", "T01234", LocalDate.of(2019, 10, 10), 1700d, 1, 1.0);
 
@@ -190,8 +188,7 @@ public class EmployeTest {
         System.out.println(nbRtt);
 
         //Then
-        Assertions.assertThat(nbRtt).isNotNull();
-        Assertions.assertThat(nbRtt).isNotEqualTo(0);
+        Assertions.assertThat(nbRtt).isNotNull().isNotEqualTo(0);;
     }
 
     @ParameterizedTest(name = "tpsPartiel {0}, dateReference {1} => nbRttAttendu {3}")
@@ -205,17 +202,43 @@ public class EmployeTest {
         "0.5, 2021, 5",
         "0.5, 2019, 4",
     })
-    public void testGetNbRtt(Double tpsPartiel, Integer dateReference, Integer nbRttAttendu){
+    void testGetNbRtt(Double tpsPartiel, Integer dateReference, Integer nbRttAttendu){
         //Given
         Employe employe = new Employe("Doe", "John", "T01234", LocalDate.of(2015, 10, 10), 1700d, 1, tpsPartiel);
 
         //When
         Integer nbRtt = employe.getNbRtt(LocalDate.of(dateReference, 1, 1));
-        System.out.println(nbRtt);
 
         //Then
         Assertions.assertThat(nbRtt).isEqualTo(nbRttAttendu);
     }
 
+    //test additionnels pour la couverture
+
+    @Test
+    void testGetNbConge(){
+        //Given
+        Employe employe = new Employe("Doe", "John", "T01234", LocalDate.of(2015, 10, 10), 1700d, 1, 1.0);
+
+        //When
+        Integer nbConges = employe.getNbConges();
+
+        //Then
+        Assertions.assertThat(nbConges).isGreaterThan(Entreprise.NB_CONGES_BASE);
+    }
+
+/*    @Test
+    public void testGetNbRttThurhdayIsLeapYear(){
+        //Given
+        Employe employe = new Employe("Doe", "John", "T01234", LocalDate.of(2019, 10, 10), 1700d, 1, 1.0);
+
+        //When
+        Integer nbRtt = employe.getNbRtt();
+        System.out.println(nbRtt);
+
+        //Then
+        Assertions.assertThat(nbRtt).isNotNull();
+        Assertions.assertThat(nbRtt).isNotEqualTo(0);
+    }*/
 
 }

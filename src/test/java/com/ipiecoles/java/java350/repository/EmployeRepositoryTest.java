@@ -73,4 +73,24 @@ class EmployeRepositoryTest {
         Assertions.assertThat(lastMatricule).isEqualTo("34567");
     }
 
+
+    @Test
+    public void testavgPerformanceWhereMatriculeStartsWith(){
+        //Given
+        //Insérer des données en base
+        employeRepository.save(new Employe("Doe", "John", "T12345", LocalDate.now(), 1500d, 1, 1.0));
+        employeRepository.save(new Employe("Doe", "John", "T23456", LocalDate.now(), 1500d, 5, 1.0));
+        employeRepository.save(new Employe("Doe", "John", "T34567", LocalDate.now(), 1500d, 6, 1.0));
+        employeRepository.save(new Employe("Doe", "John", "T22345", LocalDate.now(), 1500d, 15, 1.0));
+        //employeRepository.save(new Employe());
+
+        //When
+        //Exécuter des requêtes en base
+        Double avgPerformance = employeRepository.avgPerformanceWhereMatriculeStartsWith("T");
+        System.out.println(avgPerformance);
+
+        //Then
+        Assertions.assertThat(avgPerformance).isEqualTo(6.75);
+    }
+
 }

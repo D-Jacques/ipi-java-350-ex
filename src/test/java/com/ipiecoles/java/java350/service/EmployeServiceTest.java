@@ -107,7 +107,7 @@ class EmployeServiceTest {
     }
 
     @Test
-    public void testCalculPerformanceCommercialCaSuperieur() throws EmployeException{
+    void testCalculPerformanceCommercialCaSuperieur() throws EmployeException{
         //Given
         String nom = "Doe";
         String prenom = "John";
@@ -130,7 +130,7 @@ class EmployeServiceTest {
     }
 
     @Test
-    public void testCalculPerformanceCommercialCaIncorrect(){
+    void testCalculPerformanceCommercialCaIncorrect(){
         //Given
         String matricule = "C12345";
         Long caTraite = null;
@@ -150,7 +150,7 @@ class EmployeServiceTest {
     }
 
     @Test
-    public void testCalculPerformanceCommercialObjectifCaNull() throws EmployeException{
+    void testCalculPerformanceCommercialObjectifCaNull() throws EmployeException{
         //Given
         String matricule = "C12345";
         Long caTraite = 50000L;
@@ -176,7 +176,7 @@ class EmployeServiceTest {
             "2, 40000, 40000, 2", // ca entre -5% et 5% (38 000 et 42 000)
 
     })
-    public void testParametreCalculPerformanceCommercial(Integer basePerformance, Long caTraite, Long objectifCa,
+    void testParametreCalculPerformanceCommercial(Integer basePerformance, Long caTraite, Long objectifCa,
                                                                  Integer performanceAttendue) throws EmployeException{
         //Given
         String nom = "Doe";
