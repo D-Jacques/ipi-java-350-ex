@@ -57,6 +57,33 @@ class EmployeServiceTest {
         Assertions.assertThat(employe.getMatricule()).isEqualTo("T00001");
     }
 
+    @Test
+    public void testEmbaucheEmployeTpsPartielNull() throws EmployeException {
+        //Given Pas d'employés en base
+        String nom = "Doe";
+        String prenom = "John";
+        Poste poste = Poste.TECHNICIEN;
+        NiveauEtude niveauEtude = NiveauEtude.BTS_IUT;
+        Double tempsPartiel = null;
+        //Simuler qu'aucun employé n'est présent (ou du moins aucun matricule)
+        Mockito.when(employeRepository.findLastMatricule()).thenReturn(null);
+        //Simuler que la recherche par matricule ne renvoie pas de résultats
+        Mockito.when(employeRepository.findByMatricule("T00001")).thenReturn(null);
+        Mockito.when(employeRepository.save(Mockito.any(Employe.class))).thenAnswer(AdditionalAnswers.returnsFirstArg());
+
+        //When
+        employeService.embaucheEmploye(nom, prenom, poste, niveauEtude, tempsPartiel);
+
+        //Then
+//        Employe employe = employeRepository.findByMatricule("T00001");
+        ArgumentCaptor<Employe> employeArgumentCaptor = ArgumentCaptor.forClass(Employe.class);
+        Mockito.verify(employeRepository).save(employeArgumentCaptor.capture());
+        Employe employe = employeArgumentCaptor.getValue();
+
+        Assertions.assertThat(employe.getSalaire()).isNotNull().isEqualTo(1825.464);
+
+    }
+
 
     @Test
     public void testEmbaucheLimiteMatricule() {
