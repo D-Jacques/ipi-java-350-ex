@@ -157,10 +157,30 @@ class EmployeServiceTest {
     }
 
     @Test
-    void testCalculPerformanceCommercialCaIncorrect(){
+    void testCalculPerformanceCommercialCanull(){
         //Given
         String matricule = "C12345";
         Long caTraite = null;
+        Long objectifCa = 40000L;
+        //On a pas besoin de mocker les methodes findByMatricule et avgPerformanceWhereMatriculeStartsWith car dans notre test on ne
+        //rencontrera JAMAIS ces méthodes
+
+        try {
+            employeService.calculPerformanceCommercial(matricule, caTraite, objectifCa);
+            Assertions.fail("calculPerformanceCommercial aurait dû lancer une exception");
+        } catch (Exception e){
+            //Then
+            Mockito.verify(employeRepository, Mockito.never()).save(Mockito.any(Employe.class));
+            Assertions.assertThat(e).isInstanceOf(EmployeException.class);
+            Assertions.assertThat(e.getMessage()).isEqualTo("Le chiffre d'affaire traité ne peut être négatif ou null !");
+        }
+    }
+
+    @Test
+    void testCalculPerformanceCommercialCanegatif(){
+        //Given
+        String matricule = "C12345";
+        Long caTraite = -(45000L);
         Long objectifCa = 40000L;
         //On a pas besoin de mocker les methodes findByMatricule et avgPerformanceWhereMatriculeStartsWith car dans notre test on ne
         //rencontrera JAMAIS ces méthodes
@@ -191,6 +211,42 @@ class EmployeServiceTest {
             Mockito.verify(employeRepository, Mockito.never()).save(Mockito.any(Employe.class));
             Assertions.assertThat(e).isInstanceOf(EmployeException.class);
             Assertions.assertThat(e.getMessage()).isEqualTo("L'objectif de chiffre d'affaire ne peut être négatif ou null !");
+        }
+    }
+
+    @Test
+    void testCalculPerformanceCommercialObjectifCaNegatif() throws EmployeException{
+        //Given
+        String matricule = "C12345";
+        Long caTraite = 50000L;
+        Long objectifCa = -(45000L);
+
+        try {
+            employeService.calculPerformanceCommercial(matricule, caTraite, objectifCa);
+            Assertions.fail("calculPerformanceCommercial aurait dû lancer une exception");
+        } catch (Exception e){
+            //Then
+            Mockito.verify(employeRepository, Mockito.never()).save(Mockito.any(Employe.class));
+            Assertions.assertThat(e).isInstanceOf(EmployeException.class);
+            Assertions.assertThat(e.getMessage()).isEqualTo("L'objectif de chiffre d'affaire ne peut être négatif ou null !");
+        }
+    }
+
+    @Test
+    void testCalculPerformanceCommercialMatriculeNull() throws EmployeException{
+        //Given
+        String matricule = null;
+        Long caTraite = 50000L;
+        Long objectifCa = 45000L;
+
+        try {
+            employeService.calculPerformanceCommercial(matricule, caTraite, objectifCa);
+            Assertions.fail("calculPerformanceCommercial aurait dû lancer une exception");
+        } catch (Exception e){
+            //Then
+            Mockito.verify(employeRepository, Mockito.never()).save(Mockito.any(Employe.class));
+            Assertions.assertThat(e).isInstanceOf(EmployeException.class);
+            Assertions.assertThat(e.getMessage()).isEqualTo("Le matricule ne peut être null et doit commencer par un C !");
         }
     }
 
