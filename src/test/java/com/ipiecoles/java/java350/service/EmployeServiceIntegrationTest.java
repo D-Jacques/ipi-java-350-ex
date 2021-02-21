@@ -6,7 +6,6 @@ import com.ipiecoles.java.java350.model.NiveauEtude;
 import com.ipiecoles.java.java350.model.Poste;
 import com.ipiecoles.java.java350.repository.EmployeRepository;
 import org.assertj.core.api.Assertions;
-import org.junit.After;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -52,7 +51,7 @@ class EmployeServiceIntegrationTest {
     }
 
     @Test
-    void testCalculPerformanceCommercial() throws EmployeException{
+    public void testCalculPerformanceCommercial() throws EmployeException{
         //Given
         String nom = "Doe";
         String prenom = "John";
@@ -103,7 +102,7 @@ class EmployeServiceIntegrationTest {
         Assertions.assertThat(employe.getPerformance()).isEqualTo(performanceAttendue);
     }
 
-    @After
+    @AfterEach
     public void dbCleaner(){
         employeRepository.deleteAll();
     }
