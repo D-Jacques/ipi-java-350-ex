@@ -28,7 +28,7 @@ class EmployeServiceTest {
     private EmployeRepository employeRepository;
 
     @Test
-    public void testEmbauchePremierEmploye() throws EmployeException {
+    void testEmbauchePremierEmploye() throws EmployeException {
         //Given Pas d'employés en base
         String nom = "Doe";
         String prenom = "John";
@@ -86,7 +86,7 @@ class EmployeServiceTest {
 
 
     @Test
-    public void testEmbaucheLimiteMatricule() {
+    void testEmbaucheLimiteMatricule() {
         //Given Pas d'employés en base
         String nom = "Doe";
         String prenom = "John";
@@ -109,7 +109,7 @@ class EmployeServiceTest {
     }
 
     @Test
-    public void testEmbaucheEmployeExisteDeja() throws EmployeException {
+    void testEmbaucheEmployeExisteDeja() throws EmployeException {
         //Given Pas d'employés en base
         String nom = "Doe";
         String prenom = "John";
