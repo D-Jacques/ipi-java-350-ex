@@ -284,7 +284,7 @@ public class Employe {
                 '}';
     }
 
-/*    @Override
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Employe)) return false;
@@ -296,7 +296,7 @@ public class Employe {
                 Objects.equals(dateEmbauche, employe.dateEmbauche) &&
                 Objects.equals(salaire, employe.salaire) &&
                 Objects.equals(performance, employe.performance);
-    }*/
+    }
 
     @Override
     public int hashCode() {
