@@ -16,9 +16,7 @@ public final class Entreprise {
     public static final Map<NiveauEtude, Double> COEFF_SALAIRE_ETUDES = new EnumMap<>(NiveauEtude.class);
     private static final Map<Integer, LocalDate> datePaque = new HashMap<>();
 
-    private Entreprise() {
-
-    }
+    private Entreprise() {}
 
     static {
         COEFF_SALAIRE_ETUDES.put(NiveauEtude.CAP, 1.0);

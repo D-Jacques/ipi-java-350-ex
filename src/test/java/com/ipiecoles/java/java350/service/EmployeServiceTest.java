@@ -250,6 +250,63 @@ class EmployeServiceTest {
         }
     }
 
+    @Test
+    void testCalculPerformanceCommercialMatriculeTechnicien() throws EmployeException{
+        //Given
+        String matricule = "T12345";
+        Long caTraite = 50000L;
+        Long objectifCa = 45000L;
+
+        try {
+            employeService.calculPerformanceCommercial(matricule, caTraite, objectifCa);
+            Assertions.fail("calculPerformanceCommercial aurait dû lancer une exception");
+        } catch (Exception e){
+            //Then
+            Mockito.verify(employeRepository, Mockito.never()).save(Mockito.any(Employe.class));
+            Assertions.assertThat(e).isInstanceOf(EmployeException.class);
+            Assertions.assertThat(e.getMessage()).isEqualTo("Le matricule ne peut être null et doit commencer par un C !");
+        }
+    }
+
+    @Test
+    void testCalculPerformanceCommercialEmployeNull() throws EmployeException{
+        //Given
+        String matricule = "C12345";
+        Long caTraite = 50000L;
+        Long objectifCa = 45000L;
+        Mockito.when(employeRepository.findByMatricule(matricule)).thenReturn(null);
+
+        try {
+            employeService.calculPerformanceCommercial(matricule, caTraite, objectifCa);
+            Assertions.fail("calculPerformanceCommercial aurait dû lancer une exception");
+        } catch (Exception e){
+            //Then
+            Mockito.verify(employeRepository, Mockito.never()).save(Mockito.any(Employe.class));
+            Assertions.assertThat(e).isInstanceOf(EmployeException.class);
+            Assertions.assertThat(e.getMessage()).isEqualTo("Le matricule " + matricule + " n'existe pas !");
+        }
+    }
+
+    @Test
+    void testCalculPerformanceCommercialAvgPerfNull() throws EmployeException{
+        //Given
+        String matricule = "C12345";
+        Long caTraite = 45000L;
+        Long objectifCa = 45000L;
+        Employe employeTest = new Employe("Doe", "John", matricule, LocalDate.now(), 2400d, 1, 1.0);
+        Mockito.when(employeRepository.findByMatricule(matricule)).thenReturn(employeTest);
+        Mockito.when(employeRepository.avgPerformanceWhereMatriculeStartsWith("C")).thenReturn(null);
+
+        //When
+        employeService.calculPerformanceCommercial(matricule, caTraite, objectifCa);
+
+        //then
+        ArgumentCaptor<Employe> caCommercialCaptor = ArgumentCaptor.forClass(Employe.class);
+        Mockito.verify(employeRepository).save(caCommercialCaptor.capture());
+        Employe employeRetour = caCommercialCaptor.getValue();
+        Assertions.assertThat(employeRetour.getPerformance()).isEqualTo(employeTest.getPerformance());
+    }
+
     @ParameterizedTest(name = "Perf {0}, caTraite {1}, objectifCa {2} => performanceAttendu {3}")
     @CsvSource({
             "1, 45000, 40000, 2", // ca entre 5% et 20% (entre 42 000 et 48 000)
