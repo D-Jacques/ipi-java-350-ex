@@ -124,7 +124,8 @@ public class EmployeTest {
     void testAugmenterSalaireAugmentEmployeSalaire(){
         //Given
         //Je créer un employé avec un salaire de 1650
-        Employe employe = new Employe("Doe", "John", null, LocalDate.now(), 1650d, 1, 1.0);
+        Double salaireBase = 1650d;
+        Employe employe = new Employe("Doe", "John", null, LocalDate.now(), salaireBase, 1, 1.0);
 
         //When
         //Je calcule le nouveau salaire de l'employé en passant en paramètres 10%
@@ -132,13 +133,14 @@ public class EmployeTest {
 
         //Then
         //Je vérifie que le nouveauSalaire est bien supérieur à celui définit dans employe
-        Assertions.assertThat(nouveauSalaire).isGreaterThan(employe.getSalaire());
+        Assertions.assertThat(nouveauSalaire).isGreaterThan(salaireBase);
     }
 
     @Test
     void testAugmenterSalairePourcentagenegatif(){
         //Given
-        Employe employe = new Employe("Doe", "John", null, LocalDate.now(), 1600d, 1, 1.0);
+        Double salaireBase = 1600d;
+        Employe employe = new Employe("Doe", "John", null, LocalDate.now(), salaireBase, 1, 1.0);
 
         //When
         Double nouveauSalaire = employe.augmenterSalaire(-(10d));
@@ -150,7 +152,8 @@ public class EmployeTest {
     @Test
     void testAugmenterSalaireSalaireIncorrect(){
         //Given
-        Employe employe = new Employe("Doe", "John", null, LocalDate.now(), 100d, 1, 1.0);
+        Double salaireBase = 100d;
+        Employe employe = new Employe("Doe", "John", null, LocalDate.now(), salaireBase, 1, 1.0);
 
         //When
         Double nouveauSalaire = employe.augmenterSalaire(10);
@@ -161,8 +164,8 @@ public class EmployeTest {
 
     @ParameterizedTest(name = "Perf {0}, matricule {1}, txActivite {2}, anciennete {3}, salaire {4}, pourcentage {5} => salaireAttendu {6}")
     @CsvSource({
-            "1, 'T12345', 1.0, 10, 1552.21, 10.0, 1707.431",
-            "1, 'T12345', 0.5, 4, 1400.01, 25.0, 1901.525",
+            "1, 'T12345', 1.0, 10, 1552.21, 10.0, 1707.43",
+            "1, 'T12345', 0.5, 4, 1400.01, 25.0, 1901.53",
             "2, 'T12345', 1.0, 0, 1950.1, 0.0, 1950.1",
             "1, 'T12345', 1.0, 2, 2000.0, -10.0, 2000.0",
     })
@@ -201,10 +204,12 @@ public class EmployeTest {
         "1.5, 2022, 15",
         "0.5, 2021, 5",
         "0.5, 2019, 4",
+        "1.0, 2026, 9",
+        "1.0, 2020, 10"
     })
     void testGetNbRtt(Double tpsPartiel, Integer dateReference, Integer nbRttAttendu){
         //Given
-        Employe employe = new Employe("Doe", "John", "T01234", LocalDate.of(2015, 10, 10), 1700d, 1, tpsPartiel);
+        Employe employe = new Employe("Doe", "John", "T01234", LocalDate.of(2000, 10, 10), 1700d, 1, tpsPartiel);
 
         //When
         Integer nbRtt = employe.getNbRtt(LocalDate.of(dateReference, 1, 1));

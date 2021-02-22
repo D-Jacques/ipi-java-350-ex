@@ -97,6 +97,8 @@ public class Employe {
             case SATURDAY:
                 nbSamediDimanche = nbSamediDimanche + 1;
                 break;
+            default:
+                break;
         }
         //Entreprise.joursFeries => ressorts tout les jours fériés d'une année
         //Calcul du nombre de jours férié de l'année ne tombant pas un week-end
@@ -168,7 +170,10 @@ public class Employe {
         } else if (this.getSalaire() == null || this.getSalaire() <= Entreprise.SALAIRE_BASE){
             this.setSalaire(Entreprise.SALAIRE_BASE);
         }
-        return this.getSalaire()+(this.getSalaire()*(pourcentage/100d));
+        this.salaire = this.getSalaire()+(this.getSalaire()*(pourcentage/100d));
+        this.salaire = (double) Math.round(this.salaire*100)/100;
+        System.out.println(this.salaire);
+        return this.salaire;
     }
 
     public Long getId() {
