@@ -283,9 +283,5 @@ public class Employe {
                 ", tempsPartiel=" + tempsPartiel +
                 '}';
     }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, nom, prenom, matricule, dateEmbauche, salaire, performance);
-    }
+    
 }
