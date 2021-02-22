@@ -6,7 +6,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.util.Objects;
 
 @Entity
 public class Employe {
@@ -58,23 +57,61 @@ public class Employe {
         return Entreprise.NB_CONGES_BASE + this.getNombreAnneeAnciennete();
     }
 
+
     public Integer getNbRtt(){
         return getNbRtt(LocalDate.now());
     }
 
-    public Integer getNbRtt(LocalDate d){
-        int i1 = d.isLeapYear() ? 365 : 366;int var = 104;
-        switch (LocalDate.of(d.getYear(),1,1).getDayOfWeek()){
-        case THURSDAY: if(d.isLeapYear()) var =  var + 1; break;
-        case FRIDAY:
-        if(d.isLeapYear()) var =  var + 2;
-        else var =  var + 1;
-case SATURDAY:var = var + 1;
-                    break;
+    /**
+     * Méthode permettant de calculer le nombre de jour de RTT dans l'année (au pro-rata du taux d'activité de l'employé)
+     * selon la formule :
+     * Nb jours RTT =
+     * Nombre de jours dans l'année
+     * - Nombre de jours travaillés dans l'année en plein temps
+     * - Nombre de samedi et dimanche dans l'année
+     * - Nombre de jours fériés ne tombant pas le week-end
+     * - Nombre de congés payés
+     *
+     * @param dateReference la date à laquelle on va calculer le nombre de RTT pour l'année
+     * @return Nombre de jours de RTT pour l'employé l'année de la date de référence
+     * au prorata du temps d'activité
+     */
+    public Integer getNbRtt(LocalDate dateReference) {
+        int nbJoursAnnee = dateReference.isLeapYear() ? 366 : 365;
+        int nbSamediDimanche = 104;
+        switch (LocalDate.of(dateReference.getYear(), 1, 1).getDayOfWeek()) {
+            case THURSDAY:
+                if (dateReference.isLeapYear()) {
+                    nbSamediDimanche = nbSamediDimanche + 1;
+                }
+                break;
+            case FRIDAY:
+                if (dateReference.isLeapYear()) {
+                    nbSamediDimanche = nbSamediDimanche + 2;
+                }
+                else {
+                nbSamediDimanche = nbSamediDimanche + 1;
+                }
+            break;
+            case SATURDAY:
+                nbSamediDimanche = nbSamediDimanche + 1;
+                break;
+            default:
+                break;
         }
-        int monInt = (int) Entreprise.joursFeries(d).stream().filter(localDate ->
+        //Entreprise.joursFeries => ressorts tout les jours fériés d'une année
+        //Calcul du nombre de jours férié de l'année ne tombant pas un week-end
+        int nbJoursFeriesSemaine = (int) Entreprise.joursFeries(dateReference).stream().filter(localDate ->
                 localDate.getDayOfWeek().getValue() <= DayOfWeek.FRIDAY.getValue()).count();
-        return (int) Math.ceil((i1 - Entreprise.NB_JOURS_MAX_FORFAIT - var - Entreprise.NB_CONGES_BASE - monInt) * tempsPartiel);
+        //Lambda
+
+        return (int) Math.ceil((
+                nbJoursAnnee
+                        - Entreprise.NB_JOURS_MAX_FORFAIT
+                        - nbSamediDimanche
+                        - Entreprise.NB_CONGES_BASE
+                        - nbJoursFeriesSemaine
+        ) * tempsPartiel);
     }
 
     /**
@@ -118,7 +155,31 @@ case SATURDAY:var = var + 1;
     }
 
     //Augmenter salaire
-    //public void augmenterSalaire(double pourcentage){}
+    /**
+     * Calcul de l'augmentation du salaire d'un employé.
+     *
+     * Cette méthode augmente tout simplement le salaire de l'employé selon un pourcentage passé en paramètres.
+     *
+     * Si le pourcentage passé en paramètre est négatif ou égal à 0, on retourne le salaire de base sans augmentation
+     * Si le salaire de l'employé est null ou qu'il est inférieur au salaire de base de l'entreprise, on attribue le salaire de base de l'entreprise à l'employé
+     *
+     * Si le pourcentage et le salaire sont ok, on fait une augmentation du salaire en fonction du pourcentage passé
+     * on fait en sorte d'arrondir le salaire pour ne garder que deux chiffres après la virgule et on retourne le salaire
+     *
+     * @param pourcentage le pourcentage d'augmentation du salaire de l'employe
+     *
+     */
+    public double augmenterSalaire(double pourcentage){
+        //
+        if(pourcentage <= 0){
+            return this.getSalaire();
+        } else if (this.getSalaire() == null || this.getSalaire() <= Entreprise.SALAIRE_BASE){
+            this.setSalaire(Entreprise.SALAIRE_BASE);
+        }
+        this.salaire = this.getSalaire()+(this.getSalaire()*pourcentage/100d);
+        this.salaire = Math.round(this.salaire*100)/100d;
+        return this.salaire;
+    }
 
     public Long getId() {
         return id;
@@ -216,21 +277,17 @@ case SATURDAY:var = var + 1;
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Employe)) return false;
-        Employe employe = (Employe) o;
-        return Objects.equals(id, employe.id) &&
-                Objects.equals(nom, employe.nom) &&
-                Objects.equals(prenom, employe.prenom) &&
-                Objects.equals(matricule, employe.matricule) &&
-                Objects.equals(dateEmbauche, employe.dateEmbauche) &&
-                Objects.equals(salaire, employe.salaire) &&
-                Objects.equals(performance, employe.performance);
+    public String toString() {
+        return "Employe{" +
+                "id=" + id +
+                ", nom='" + nom + '\'' +
+                ", prenom='" + prenom + '\'' +
+                ", matricule='" + matricule + '\'' +
+                ", dateEmbauche=" + dateEmbauche +
+                ", salaire=" + salaire +
+                ", performance=" + performance +
+                ", tempsPartiel=" + tempsPartiel +
+                '}';
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, nom, prenom, matricule, dateEmbauche, salaire, performance);
-    }
 }

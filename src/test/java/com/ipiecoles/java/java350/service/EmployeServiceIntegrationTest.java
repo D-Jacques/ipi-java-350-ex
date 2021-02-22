@@ -8,10 +8,17 @@ import com.ipiecoles.java.java350.repository.EmployeRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.event.annotation.BeforeTestMethod;
 
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
 
 @SpringBootTest
 class EmployeServiceIntegrationTest {
@@ -22,8 +29,10 @@ class EmployeServiceIntegrationTest {
     @Autowired
     private EmployeRepository employeRepository;
 
+    // TESTS EMBAUCHE //
+
     @Test
-    public void testEmbauchePremierEmploye() throws EmployeException {
+    void testEmbauchePremierEmploye() throws EmployeException {
         //Given Pas d'employés en base
         String nom = "Doe";
         String prenom = "John";
@@ -42,6 +51,65 @@ class EmployeServiceIntegrationTest {
         Assertions.assertThat(employe.getDateEmbauche()).isEqualTo(LocalDate.now());
         Assertions.assertThat(employe.getMatricule()).isEqualTo("T00001");
     }
+
+    // TEST CALCUL PERFORMANCE COMMERCIAL
+
+    @Test
+    void testCalculPerformanceCommercial() throws EmployeException{
+        //Given
+        // On initialise les données pour le test
+        String nom = "Doe";
+        String prenom = "John";
+        Poste poste = Poste.COMMERCIAL;
+        NiveauEtude niveauEtude = NiveauEtude.LICENCE;
+        Double tempsPartiel = 1.0;
+        employeService.embaucheEmploye(nom, prenom, poste, niveauEtude, tempsPartiel);
+        Long caTraite = 45000L;
+        Long objectifCa = 40000L;
+        //Ici on cherche a faire des tests intégrés, donc du coup on créer une dépendance a une BDD (crée en mémoire)
+        String matricule = "C"+employeRepository.findLastMatricule();
+
+        //When
+        employeService.calculPerformanceCommercial(matricule, caTraite, objectifCa);
+
+        //then
+        //On récupère notre employé enregistrer en BDD et on vérifie que la performance est bien la performance que l'on attendait
+        Employe employe = employeRepository.findByMatricule(matricule);
+        Assertions.assertThat(employe.getPerformance()).isEqualTo(3);
+    }
+
+    //test parametrés pour calculPerformanceCommercial
+    @ParameterizedTest(name = "caTraite {0}, objectifCa {1} => performanceAttendu {2}")
+    @CsvSource({
+            "45000, 40000, 3", // ca entre 5% et 20% (entre 42 000 et 48 000)
+            "50000, 40000, 6", // ca supérieur à 20% (> a 48 000) + bonus de perf superieur à perf moyenne
+            "30000, 40000, 1", // ca à -20% (< à 32 000)
+            "35000, 40000, 1", // ca entre -20% et -5% (entre 32 000 et 38 000)
+            "40000, 40000, 1", // ca entre -5% et 5% (38 000 et 42 000)
+
+    })
+    void testParametreCalculPerformanceCommercial(Long caTraite, Long objectifCa,
+                                                         Integer performanceAttendue) throws EmployeException{
+        //Given
+        String nom = "Doe";
+        String prenom = "John";
+        Poste poste = Poste.COMMERCIAL;
+        NiveauEtude niveauEtude = NiveauEtude.LICENCE;
+        Double tempsPartiel = 1.0;
+        employeService.embaucheEmploye(nom, prenom, poste, niveauEtude, tempsPartiel);
+        String matricule = "C"+employeRepository.findLastMatricule();
+
+        //When
+        employeService.calculPerformanceCommercial(matricule, caTraite, objectifCa);
+
+        //then
+        //Pour chaque test on s'assure que la performance en retour correpond bien à la performance attendue
+        //Pour chaque test on s'assure que la performance en retour correpond bien à la performance attendue
+        Employe employe = employeRepository.findByMatricule(matricule);
+        Assertions.assertThat(employe.getPerformance()).isEqualTo(performanceAttendue);
+    }
+
+    // After each test we clear all the data in the base so as not to false the results.
 
     @AfterEach
     public void dbCleaner(){

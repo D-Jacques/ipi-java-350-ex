@@ -16,9 +16,7 @@ public final class Entreprise {
     public static final Map<NiveauEtude, Double> COEFF_SALAIRE_ETUDES = new EnumMap<>(NiveauEtude.class);
     private static final Map<Integer, LocalDate> datePaque = new HashMap<>();
 
-    private Entreprise() {
-
-    }
+    private Entreprise() {}
 
     static {
         COEFF_SALAIRE_ETUDES.put(NiveauEtude.CAP, 1.0);
@@ -29,6 +27,7 @@ public final class Entreprise {
         COEFF_SALAIRE_ETUDES.put(NiveauEtude.INGENIEUR, 1.6);
         COEFF_SALAIRE_ETUDES.put(NiveauEtude.DOCTORAT, 1.7);
 
+        datePaque.put(2016, LocalDate.of(2016, 4, 21));
         datePaque.put(2019, LocalDate.of(2019, 4, 21));
         datePaque.put(2020, LocalDate.of(2020, 4, 12));
         datePaque.put(2021, LocalDate.of(2021, 4, 4));
