@@ -82,7 +82,7 @@ public class EmployeTest {
     }
 
     @Test
-    public void testGetPrimmeAnnuellePerformanceNegative(){
+    void testGetPrimmeAnnuellePerformanceNegative(){
         Employe employeTest = new Employe("Doe", "John", "T12345", LocalDate.now(), 1500d, (-1), 1.0);
 
         Double primeAnnuelle = employeTest.getPrimeAnnuelle();
@@ -92,7 +92,7 @@ public class EmployeTest {
     }
 
     @Test
-    public void testGetPrimmeAnnuelleManager(){
+    void testGetPrimmeAnnuelleManager(){
         Employe employeTest = new Employe("Doe", "John", "M12345", LocalDate.now(), 1600d, 1, 1.0);
 
         Double primeAnnuelle = employeTest.getPrimeAnnuelle();
@@ -102,12 +102,12 @@ public class EmployeTest {
     }
 
     @Test
-    public void testGetPrimmeAnnuellePerfNull(){
+    void testGetPrimmeAnnuellePerfNull(){
         Employe employeTest = new Employe("Doe", "John", "T12345", LocalDate.now(), 1600d, null, 1.0);
 
         Double primeAnnuelle = employeTest.getPrimeAnnuelle();
 
-        Assertions.assertThat(primeAnnuelle).isGreaterThan(0).isEqualTo(1000);
+        Assertions.assertThat(primeAnnuelle).isPositive().isEqualTo(1000);
 
     }
 
