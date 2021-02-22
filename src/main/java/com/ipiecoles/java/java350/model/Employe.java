@@ -271,6 +271,20 @@ public class Employe {
     }
 
     @Override
+    public String toString() {
+        return "Employe{" +
+                "id=" + id +
+                ", nom='" + nom + '\'' +
+                ", prenom='" + prenom + '\'' +
+                ", matricule='" + matricule + '\'' +
+                ", dateEmbauche=" + dateEmbauche +
+                ", salaire=" + salaire +
+                ", performance=" + performance +
+                ", tempsPartiel=" + tempsPartiel +
+                '}';
+    }
+
+/*    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Employe)) return false;
@@ -282,7 +296,7 @@ public class Employe {
                 Objects.equals(dateEmbauche, employe.dateEmbauche) &&
                 Objects.equals(salaire, employe.salaire) &&
                 Objects.equals(performance, employe.performance);
-    }
+    }*/
 
     @Override
     public int hashCode() {
