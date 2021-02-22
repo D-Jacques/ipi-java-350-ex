@@ -8,10 +8,10 @@ import org.junit.jupiter.params.provider.CsvSource;
 import java.time.LocalDate;
 
 
-public class EmployeTest {
+class EmployeTest {
 
     @Test
-    public void testGetNbAnneeAncienneteDateEmbaucheNull(){
+    void testGetNbAnneeAncienneteDateEmbaucheNull(){
         //Given
         Employe employe = new Employe();
         employe.setDateEmbauche(null);
@@ -22,7 +22,7 @@ public class EmployeTest {
     }
 
     @Test
-    public void testGetNbAnneeAncienneteDateEmbaucheInfNow(){
+    void testGetNbAnneeAncienneteDateEmbaucheInfNow(){
         //Given
         Employe employeTest = new Employe("Doe", "John", "T12345", LocalDate.of(2015,8,21), 1500d, 1, 1.0);
 
@@ -30,12 +30,11 @@ public class EmployeTest {
         Integer anneeAnciennete = employeTest.getNombreAnneeAnciennete();
 
         //Then
-        Assertions.assertThat(anneeAnciennete).isGreaterThanOrEqualTo(0);
-        Assertions.assertThat(anneeAnciennete).isLessThan(100);
+        Assertions.assertThat(anneeAnciennete).isNotNegative().isLessThan(100);
     }
 
     @Test
-    public void testGetNbAnneeAncienneteDateEmbaucheSupNow(){
+    void testGetNbAnneeAncienneteDateEmbaucheSupNow(){
         //Given
         Employe employeTest = new Employe("Doe", "John", "T12345", LocalDate.of(2222,8,21), 1500d, 1, 1.0);
 
@@ -47,7 +46,7 @@ public class EmployeTest {
     }
 
     @Test
-    public void testGetNbAnneeAncienneteDateEmbaucheNow(){
+    void testGetNbAnneeAncienneteDateEmbaucheNow(){
         //Given
         Employe employeTest = new Employe("Doe", "John", "T12345", LocalDate.now(), 1500d, 1, 1.0);
 
@@ -55,11 +54,11 @@ public class EmployeTest {
         Integer anneeAnciennete = employeTest.getNombreAnneeAnciennete();
 
         //Then
-        Assertions.assertThat(anneeAnciennete).isEqualTo(0);
+        Assertions.assertThat(anneeAnciennete).isZero();
     }
 
     @Test
-    public void testGetPrimmeAnnuelleTempsPartielNegatif(){
+    void testGetPrimmeAnnuelleTempsPartielNegatif(){
         Employe employeTest = new Employe("Doe", "John", "T12345", LocalDate.now(), 1500d, 1, -1.0);
 
         Double primeAnnuelle = employeTest.getPrimeAnnuelle();
@@ -69,7 +68,7 @@ public class EmployeTest {
     }
 
     @Test
-    public void testGetPrimmeAnnuellePrimeAncienneteNegatif(){
+    void testGetPrimmeAnnuellePrimeAncienneteNegatif(){
         //Given
         Employe employeTest = new Employe("Doe", "John", "T12345", LocalDate.now(), 1500d, 1, -1.0);
 
@@ -87,7 +86,7 @@ public class EmployeTest {
 
         Double primeAnnuelle = employeTest.getPrimeAnnuelle();
 
-        Assertions.assertThat(primeAnnuelle).isLessThanOrEqualTo(0);
+        Assertions.assertThat(primeAnnuelle).isNegative();
 
     }
 
@@ -118,7 +117,7 @@ public class EmployeTest {
             "2, 'T12345', 1.0, 0, 2300.0",
             "1, 'T12345', 1.0, 2, 1200.0",
             })
-    public void testGetPrimeAnnuelle(Integer performance, String matricule, Double tauxActivite, Long nbAnneesAnciennete,
+    void testGetPrimeAnnuelle(Integer performance, String matricule, Double tauxActivite, Long nbAnneesAnciennete,
                                      Double primeAttendue){
         //Given
         Employe employe = new Employe("Doe", "John", matricule,
@@ -131,7 +130,7 @@ public class EmployeTest {
     }
 
     @Test
-    public void testGetPrimeAnnuelleMatriculeNull(){
+    void testGetPrimeAnnuelleMatriculeNull(){
         //Given
         Employe employe = new Employe("Doe", "John", null, LocalDate.now(), 1500d, 1, 1.0);
         //When

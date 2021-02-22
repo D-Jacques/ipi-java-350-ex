@@ -38,7 +38,7 @@ class EmployeRepositoryTest {
             "2, 'T34512', 1.0, 0",
             "1, 'T45123', 1.0, 2",
     })
-    public void test(Integer performance, String matricule, Double tauxActivite, Long nbAnneesAnciennete){
+    void test(Integer performance, String matricule, Double tauxActivite, Long nbAnneesAnciennete){
         //Given
         //Insérer des données en base
         employeRepository.save(new Employe("Doe", "John", matricule, LocalDate.now().minusYears(nbAnneesAnciennete), 1500d, performance, tauxActivite));
@@ -55,7 +55,7 @@ class EmployeRepositoryTest {
     }
 
     @Test
-    public void testEmployeRepositoryMaxMatricule(){
+    void testEmployeRepositoryMaxMatricule(){
         //Given
         //Insérer des données en base
         employeRepository.save(new Employe("Doe", "John", "T12345", LocalDate.now(), 1500d, 1, 1.0));
