@@ -160,10 +160,17 @@ public class Employe {
      *
      * Cette méthode augmente tout simplement le salaire de l'employé selon un pourcentage passé en paramètres.
      *
+     * Si le pourcentage passé en paramètre est négatif ou égal à 0, on retourne le salaire de base sans augmentation
+     * Si le salaire de l'employé est null ou qu'il est inférieur au salaire de base de l'entreprise, on attribue le salaire de base de l'entreprise à l'employé
+     *
+     * Si le pourcentage et le salaire sont ok, on fait une augmentation du salaire en fonction du pourcentage passé
+     * on fait en sorte d'arrondir le salaire pour ne garder que deux chiffres après la virgule et on retourne le salaire
+     *
      * @param pourcentage le pourcentage d'augmentation du salaire de l'employe
      *
      */
     public double augmenterSalaire(double pourcentage){
+        //
         if(pourcentage <= 0){
             return this.getSalaire();
         } else if (this.getSalaire() == null || this.getSalaire() <= Entreprise.SALAIRE_BASE){

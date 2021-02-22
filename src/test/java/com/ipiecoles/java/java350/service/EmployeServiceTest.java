@@ -5,21 +5,15 @@ import com.ipiecoles.java.java350.model.NiveauEtude;
 import com.ipiecoles.java.java350.model.Poste;
 import com.ipiecoles.java.java350.repository.EmployeRepository;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.*;
-import org.mockito.internal.matchers.Null;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.mockito.junit.jupiter.MockitoExtension;;
 
 import javax.persistence.EntityExistsException;
 import java.time.LocalDate;
-import java.util.List;
 @ExtendWith(MockitoExtension.class)
 class EmployeServiceTest {
     @InjectMocks
@@ -133,6 +127,8 @@ class EmployeServiceTest {
         }
     }
 
+    //TESTS CALCUL PERFORMANCE COMMERCIAL
+
     @Test
     void testCalculPerformanceCommercialCaSuperieur() throws EmployeException{
         //Given
@@ -143,13 +139,18 @@ class EmployeServiceTest {
         Long objectifCa = 40000L;
         Integer basePerformance = 1;
         Employe employeTest = new Employe(nom, prenom, matricule, LocalDate.now(), 2400d, basePerformance, 1.0);
+        //On mock les fonctions venant du employeRepositry afin de retourner un résultat bien que ce test ne connais pas employeRepository
+        //Par défaut, lorsque findByMatricule sera appeler, on retourne en réponse notre employeTest
         Mockito.when(employeRepository.findByMatricule(matricule)).thenReturn(employeTest);
+        //Par défaut lorsque avgPerformanceWhereMatriculeStartsWith on simulera une valeur moyenne de performance de 2
         Mockito.when(employeRepository.avgPerformanceWhereMatriculeStartsWith("C")).thenReturn(2d);
 
         //When
+        //On lance la méthode de employeService
         employeService.calculPerformanceCommercial(matricule, caTraite, objectifCa);
 
         //then
+        //On place un capteur qui va récupérer le retour de notre employé après qu'il soit passé par calculPerformanceCommercial
         ArgumentCaptor<Employe> caCommercialCaptor = ArgumentCaptor.forClass(Employe.class);
         Mockito.verify(employeRepository).save(caCommercialCaptor.capture());
         Employe employeRetour = caCommercialCaptor.getValue();
@@ -166,10 +167,12 @@ class EmployeServiceTest {
         //rencontrera JAMAIS ces méthodes
 
         try {
+            //On essaye de d'executer calculPerformanceCommercial dans employeService, notre test est réussi si une exception a bien lieu
             employeService.calculPerformanceCommercial(matricule, caTraite, objectifCa);
             Assertions.fail("calculPerformanceCommercial aurait dû lancer une exception");
         } catch (Exception e){
             //Then
+            //On vérifie que notre fonction a bien rencontré une exception
             Mockito.verify(employeRepository, Mockito.never()).save(Mockito.any(Employe.class));
             Assertions.assertThat(e).isInstanceOf(EmployeException.class);
             Assertions.assertThat(e.getMessage()).isEqualTo("Le chiffre d'affaire traité ne peut être négatif ou null !");
@@ -307,6 +310,7 @@ class EmployeServiceTest {
         Assertions.assertThat(employeRetour.getPerformance()).isEqualTo(employeTest.getPerformance());
     }
 
+    //Test parametrés pour la methode calculPerformanceCommercial
     @ParameterizedTest(name = "Perf {0}, caTraite {1}, objectifCa {2} => performanceAttendu {3}")
     @CsvSource({
             "1, 45000, 40000, 2", // ca entre 5% et 20% (entre 42 000 et 48 000)
@@ -330,10 +334,10 @@ class EmployeServiceTest {
         employeService.calculPerformanceCommercial(matricule, caTraite, objectifCa);
 
         //then
+        //On s'assure que la performance en retour de notre employé est bien la performance attendue
         ArgumentCaptor<Employe> caCommercialCaptor = ArgumentCaptor.forClass(Employe.class);
         Mockito.verify(employeRepository).save(caCommercialCaptor.capture());
         Employe employeRetour = caCommercialCaptor.getValue();
-        System.out.println(employeRetour.getPerformance());
         Assertions.assertThat(employeRetour.getPerformance()).isEqualTo(performanceAttendue);
     }
 

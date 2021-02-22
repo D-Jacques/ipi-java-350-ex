@@ -23,14 +23,13 @@ import java.util.Map;
 @SpringBootTest
 class EmployeServiceIntegrationTest {
 
-    //Test unitaire = test de code => le code fait ce qui est attendu
-    //Test d'intégration = test de fonctionalité
-
     @Autowired
     private EmployeService employeService;
 
     @Autowired
     private EmployeRepository employeRepository;
+
+    // TESTS EMBAUCHE //
 
     @Test
     void testEmbauchePremierEmploye() throws EmployeException {
@@ -53,9 +52,12 @@ class EmployeServiceIntegrationTest {
         Assertions.assertThat(employe.getMatricule()).isEqualTo("T00001");
     }
 
+    // TEST CALCUL PERFORMANCE COMMERCIAL
+
     @Test
     void testCalculPerformanceCommercial() throws EmployeException{
         //Given
+        // On initialise les données pour le test
         String nom = "Doe";
         String prenom = "John";
         Poste poste = Poste.COMMERCIAL;
@@ -64,17 +66,20 @@ class EmployeServiceIntegrationTest {
         employeService.embaucheEmploye(nom, prenom, poste, niveauEtude, tempsPartiel);
         Long caTraite = 45000L;
         Long objectifCa = 40000L;
+        //Ici on cherche a faire des tests intégrés, donc du coup on créer une dépendance a une BDD (crée en mémoire)
         String matricule = "C"+employeRepository.findLastMatricule();
 
         //When
         employeService.calculPerformanceCommercial(matricule, caTraite, objectifCa);
 
         //then
+        //On récupère notre employé enregistrer en BDD et on vérifie que la performance est bien la performance que l'on attendait
         Employe employe = employeRepository.findByMatricule(matricule);
         System.out.println(employe.getPerformance());
         Assertions.assertThat(employe.getPerformance()).isEqualTo(3);
     }
 
+    //test parametrés pour calculPerformanceCommercial
     @ParameterizedTest(name = "caTraite {0}, objectifCa {1} => performanceAttendu {2}")
     @CsvSource({
             "45000, 40000, 3", // ca entre 5% et 20% (entre 42 000 et 48 000)
@@ -100,10 +105,13 @@ class EmployeServiceIntegrationTest {
         employeService.calculPerformanceCommercial(matricule, caTraite, objectifCa);
 
         //then
+        //Pour chaque test on s'assure que la performance en retour correpond bien à la performance attendue
         Employe employe = employeRepository.findByMatricule(matricule);
         System.out.println(employe.getPerformance());
         Assertions.assertThat(employe.getPerformance()).isEqualTo(performanceAttendue);
     }
+
+    // After each test we clear all the data in the base so as not to false the results.
 
     @AfterEach
     public void dbCleaner(){
