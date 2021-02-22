@@ -6,7 +6,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.util.Objects;
 
 @Entity
 public class Employe {
@@ -90,9 +89,9 @@ public class Employe {
                 if (dateReference.isLeapYear()) {
                     nbSamediDimanche = nbSamediDimanche + 2;
                 }
-            else {
+                else {
                 nbSamediDimanche = nbSamediDimanche + 1;
-            }
+                }
             break;
             case SATURDAY:
                 nbSamediDimanche = nbSamediDimanche + 1;
@@ -283,5 +282,5 @@ public class Employe {
                 ", tempsPartiel=" + tempsPartiel +
                 '}';
     }
-    
+
 }
