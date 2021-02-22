@@ -10,6 +10,8 @@ import java.time.LocalDate;
 
 class EmployeTest {
 
+    // TESTS NB ANCIENNETE
+
     @Test
     void testGetNbAnneeAncienneteDateEmbaucheNull(){
         //Given
@@ -56,6 +58,8 @@ class EmployeTest {
         //Then
         Assertions.assertThat(anneeAnciennete).isZero();
     }
+
+    // TESTS PRIME ANNUELLE //
 
     @Test
     void testGetPrimmeAnnuelleTempsPartielNegatif(){
@@ -139,6 +143,8 @@ class EmployeTest {
         Assertions.assertThat(prime).isEqualTo(1000.0);
     }
 
+    // TESTS AUGMENTER SALAIRE //
+
     @Test
     void testAugmenterSalaireAugmentEmployeSalaire(){
         //Given
@@ -196,6 +202,8 @@ class EmployeTest {
         Assertions.assertThat(salaireAugmente).isEqualTo(salaireAttendu);
     }
 
+    // TESTS GET NOMBRE RTT //
+
     @Test
     void testGetNbRttNotNullOrEqualZero(){
         //Given
@@ -203,10 +211,9 @@ class EmployeTest {
 
         //When
         Integer nbRtt = employe.getNbRtt();
-        System.out.println(nbRtt);
 
         //Then
-        Assertions.assertThat(nbRtt).isNotNull().isNotEqualTo(0);;
+        Assertions.assertThat(nbRtt).isNotNull().isNotEqualTo(0);
     }
 
     @ParameterizedTest(name = "tpsPartiel {0}, dateReference {1} => nbRttAttendu {3}")
@@ -233,7 +240,7 @@ class EmployeTest {
         Assertions.assertThat(nbRtt).isEqualTo(nbRttAttendu);
     }
 
-    //test additionnels pour la couverture
+    //TESTS ADDITIONNELS//
 
     @Test
     void testGetNbConge(){
