@@ -91,6 +91,26 @@ public class EmployeTest {
 
     }
 
+    @Test
+    public void testGetPrimmeAnnuelleManager(){
+        Employe employeTest = new Employe("Doe", "John", "M12345", LocalDate.now(), 1600d, 1, 1.0);
+
+        Double primeAnnuelle = employeTest.getPrimeAnnuelle();
+
+        Assertions.assertThat(primeAnnuelle).isEqualTo(1700);
+
+    }
+
+    @Test
+    public void testGetPrimmeAnnuellePerfNull(){
+        Employe employeTest = new Employe("Doe", "John", "T12345", LocalDate.now(), 1600d, null, 1.0);
+
+        Double primeAnnuelle = employeTest.getPrimeAnnuelle();
+
+        Assertions.assertThat(primeAnnuelle).isGreaterThan(0).isEqualTo(1000);
+
+    }
+
     @ParameterizedTest(name = "Perf {0}, matricule {1}, txActivite {2}, anciennete {3} => prime {4}")
     @CsvSource({
             "1, 'T12345', 1.0, 0, 1000.0",
@@ -123,17 +143,13 @@ public class EmployeTest {
     @Test
     void testAugmenterSalaireAugmentEmployeSalaire(){
         //Given
-        //Je créer un employé avec un salaire de 1650
-        Double salaireBase = 1650d;
-        Employe employe = new Employe("Doe", "John", null, LocalDate.now(), salaireBase, 1, 1.0);
+        Employe employe = new Employe("Doe", "John", "T40404", LocalDate.now(), null, 1, 1.0);
 
         //When
-        //Je calcule le nouveau salaire de l'employé en passant en paramètres 10%
         Double nouveauSalaire = employe.augmenterSalaire(10);
 
         //Then
-        //Je vérifie que le nouveauSalaire est bien supérieur à celui définit dans employe
-        Assertions.assertThat(nouveauSalaire).isGreaterThan(salaireBase);
+        Assertions.assertThat(nouveauSalaire).isNotNull();
     }
 
     @Test
@@ -231,19 +247,4 @@ public class EmployeTest {
         //Then
         Assertions.assertThat(nbConges).isGreaterThan(Entreprise.NB_CONGES_BASE);
     }
-
-/*    @Test
-    public void testGetNbRttThurhdayIsLeapYear(){
-        //Given
-        Employe employe = new Employe("Doe", "John", "T01234", LocalDate.of(2019, 10, 10), 1700d, 1, 1.0);
-
-        //When
-        Integer nbRtt = employe.getNbRtt();
-        System.out.println(nbRtt);
-
-        //Then
-        Assertions.assertThat(nbRtt).isNotNull();
-        Assertions.assertThat(nbRtt).isNotEqualTo(0);
-    }*/
-
 }

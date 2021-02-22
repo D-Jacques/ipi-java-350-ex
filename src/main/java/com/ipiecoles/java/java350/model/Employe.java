@@ -172,7 +172,6 @@ public class Employe {
         }
         this.salaire = this.getSalaire()+(this.getSalaire()*(pourcentage/100d));
         this.salaire = (double) Math.round(this.salaire*100)/100;
-        System.out.println(this.salaire);
         return this.salaire;
     }
 
