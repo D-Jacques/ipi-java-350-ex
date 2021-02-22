@@ -73,11 +73,10 @@ class EmployeRepositoryTest {
         //When
         //Exécuter des requêtes en base
         Double avgPerformance = employeRepository.avgPerformanceWhereMatriculeStartsWith("T");
-        System.out.println(avgPerformance);
 
         //Then
         //On s'assure que avgPerformanceWhereMatriculeStartsWith nous renvoie une moyenne de 6.75 avec les employés ajoutés précédemment en bdd
-        Assertions.assertThat(avgPerformance).isEqualTo(6.75);
+        Assertions.assertThat(avgPerformance).isPositive().isEqualTo(6.75);
     }
 
 }

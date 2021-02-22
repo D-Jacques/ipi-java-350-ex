@@ -75,7 +75,6 @@ class EmployeServiceIntegrationTest {
         //then
         //On récupère notre employé enregistrer en BDD et on vérifie que la performance est bien la performance que l'on attendait
         Employe employe = employeRepository.findByMatricule(matricule);
-        System.out.println(employe.getPerformance());
         Assertions.assertThat(employe.getPerformance()).isEqualTo(3);
     }
 
@@ -99,15 +98,14 @@ class EmployeServiceIntegrationTest {
         Double tempsPartiel = 1.0;
         employeService.embaucheEmploye(nom, prenom, poste, niveauEtude, tempsPartiel);
         String matricule = "C"+employeRepository.findLastMatricule();
-        System.out.println(matricule);
 
         //When
         employeService.calculPerformanceCommercial(matricule, caTraite, objectifCa);
 
         //then
         //Pour chaque test on s'assure que la performance en retour correpond bien à la performance attendue
+        //Pour chaque test on s'assure que la performance en retour correpond bien à la performance attendue
         Employe employe = employeRepository.findByMatricule(matricule);
-        System.out.println(employe.getPerformance());
         Assertions.assertThat(employe.getPerformance()).isEqualTo(performanceAttendue);
     }
 

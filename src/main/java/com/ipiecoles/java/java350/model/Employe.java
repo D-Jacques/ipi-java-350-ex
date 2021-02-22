@@ -176,8 +176,8 @@ public class Employe {
         } else if (this.getSalaire() == null || this.getSalaire() <= Entreprise.SALAIRE_BASE){
             this.setSalaire(Entreprise.SALAIRE_BASE);
         }
-        this.salaire = this.getSalaire()+(this.getSalaire()*(pourcentage/100d));
-        this.salaire = (double) Math.round(this.salaire*100)/100;
+        this.salaire = this.getSalaire()+(this.getSalaire()*pourcentage/100d);
+        this.salaire = Math.round(this.salaire*100)/100d;
         return this.salaire;
     }
 
