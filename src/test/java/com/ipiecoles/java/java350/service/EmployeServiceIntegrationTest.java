@@ -54,7 +54,7 @@ class EmployeServiceIntegrationTest {
     }
 
     @Test
-    public void testCalculPerformanceCommercial() throws EmployeException{
+    void testCalculPerformanceCommercial() throws EmployeException{
         //Given
         String nom = "Doe";
         String prenom = "John";
@@ -84,7 +84,7 @@ class EmployeServiceIntegrationTest {
             "40000, 40000, 1", // ca entre -5% et 5% (38 000 et 42 000)
 
     })
-    public void testParametreCalculPerformanceCommercial(Long caTraite, Long objectifCa,
+    void testParametreCalculPerformanceCommercial(Long caTraite, Long objectifCa,
                                                          Integer performanceAttendue) throws EmployeException{
         //Given
         String nom = "Doe";

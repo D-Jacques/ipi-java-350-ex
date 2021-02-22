@@ -58,7 +58,7 @@ class EmployeServiceTest {
     }
 
     @Test
-    public void testEmbaucheEmployeTpsPartielNull() throws EmployeException {
+    void testEmbaucheEmployeTpsPartielNull() throws EmployeException {
         //Given Pas d'employés en base
         String nom = "Doe";
         String prenom = "John";

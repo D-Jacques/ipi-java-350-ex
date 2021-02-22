@@ -75,7 +75,7 @@ class EmployeRepositoryTest {
 
 
     @Test
-    public void testavgPerformanceWhereMatriculeStartsWith(){
+    void testavgPerformanceWhereMatriculeStartsWith(){
         //Given
         //Insérer des données en base
         employeRepository.save(new Employe("Doe", "John", "T12345", LocalDate.now(), 1500d, 1, 1.0));
